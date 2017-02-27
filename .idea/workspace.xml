@@ -19,12 +19,12 @@
     <favorites_list name="GameTest_PyPlatforming" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="window.py" pinned="false" current-in-tab="true">
+    <leaf>
+      <file leaf-file-name="window.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/window.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="59" lean-forward="true" selection-start-line="29" selection-start-column="59" selection-end-line="29" selection-end-column="59" />
+            <state relative-caret-position="1462">
+              <caret line="86" column="59" lean-forward="false" selection-start-line="86" selection-start-column="59" selection-end-line="86" selection-end-column="59" />
               <folding>
                 <element signature="e#0#58#0" expanded="true" />
               </folding>
@@ -32,14 +32,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="input.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/input.py">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+            <state relative-caret-position="340">
+              <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
               <folding>
-                <element signature="e#0#27#0" expanded="true" />
+                <element signature="e#0#22#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="timing.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/timing.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="697">
+              <caret line="42" column="24" lean-forward="true" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="24" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -69,6 +79,10 @@
       <find>STATE</find>
       <find>POSITION</find>
       <find>shoot</find>
+      <find>dpad_up</find>
+      <find>ButtonState.press</find>
+      <find>&quot;release&quot;</find>
+      <find>effect_smoke</find>
     </findStrings>
     <replaceStrings>
       <replace>player_</replace>
@@ -82,7 +96,27 @@
       <replace>self.VELOCITY</replace>
       <replace>self.STATE</replace>
       <replace>self.POSITION</replace>
+      <replace>dpad_down</replace>
+      <replace>dpad_left</replace>
+      <replace>dpad_right</replace>
+      <replace>button_start</replace>
+      <replace>button_back</replace>
+      <replace>button_a</replace>
+      <replace>button_b</replace>
+      <replace>button_x</replace>
+      <replace>button_y</replace>
+      <replace>stick_left</replace>
+      <replace>stick_right</replace>
+      <replace>shoulder_left</replace>
+      <replace>shoulder_right</replace>
+      <replace>ButtonState.press</replace>
+      <replace>ButtonState.release</replace>
+      <replace>True</replace>
+      <replace>False</replace>
     </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -95,15 +129,17 @@
         <option value="$PROJECT_DIR$/Jumping.py" />
         <option value="$PROJECT_DIR$/RaycastTest.py" />
         <option value="$PROJECT_DIR$/XinputAcess.py" />
-        <option value="$PROJECT_DIR$/xinput.py" />
         <option value="$PROJECT_DIR$/Player.py" />
         <option value="$PROJECT_DIR$/Input.py" />
-        <option value="$PROJECT_DIR$/input.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/loading.py" />
         <option value="$PROJECT_DIR$/world.py" />
+        <option value="$PROJECT_DIR$/xinput.py" />
+        <option value="$PROJECT_DIR$/input.py" />
+        <option value="$PROJECT_DIR$/playerentity.py" />
         <option value="$PROJECT_DIR$/player.py" />
         <option value="$PROJECT_DIR$/window.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/timing.py" />
       </list>
     </option>
   </component>
@@ -151,8 +187,17 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/Ilja/workspace/GameTest_PyPlatforming/Input.py" />
   </component>
-  <component name="RunManager" selected="Python.Jumping">
-    <configuration default="false" name="Jumping" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Ilja\workspace\GameTest_PyPlatforming" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Ilja\workspace\GameTest_PyPlatforming\asd" />
+      <recent name="C:\Users\Ilja\workspace\GameTest_PyPlatforming" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration default="false" name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -164,75 +209,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="GameTest_PyPlatforming" />
-      <option name="SCRIPT_NAME" value="C:\Users\Ilja\workspace\GameTest_PyPlatforming\main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="GameTest_PyPlatforming" />
-      <option name="SCRIPT_NAME" value="C:\Users\Ilja\workspace\GameTest_PyPlatforming\xinput.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="RaycastTest" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="GameTest_PyPlatforming" />
-      <option name="SCRIPT_NAME" value="C:\Users\Ilja\workspace\GameTest_PyPlatforming\raycast.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="XinputAcess" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="GameTest_PyPlatforming" />
-      <option name="SCRIPT_NAME" value="C:\Users\Ilja\workspace\GameTest_PyPlatforming\xinput.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="xinput" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="GameTest_PyPlatforming" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/xinput.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -245,7 +222,7 @@
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="GameTest_PyPlatforming" />
@@ -371,20 +348,12 @@
       <option name="USE_KEYWORD" value="false" />
       <method />
     </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.Jumping" />
-      <item index="1" class="java.lang.String" itemvalue="Python.test" />
-      <item index="2" class="java.lang.String" itemvalue="Python.RaycastTest" />
-      <item index="3" class="java.lang.String" itemvalue="Python.XinputAcess" />
-      <item index="4" class="java.lang.String" itemvalue="Python.xinput" />
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="Python.main" />
     </list>
     <recent_temporary>
-      <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.Jumping" />
-        <item index="1" class="java.lang.String" itemvalue="Python.RaycastTest" />
-        <item index="2" class="java.lang.String" itemvalue="Python.xinput" />
-        <item index="3" class="java.lang.String" itemvalue="Python.XinputAcess" />
-        <item index="4" class="java.lang.String" itemvalue="Python.test" />
+      <list size="1">
+        <item index="0" class="java.lang.String" itemvalue="Python.main" />
       </list>
     </recent_temporary>
   </component>
@@ -414,16 +383,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="right" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37618545" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37460485" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32824025" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="true" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39718616" sideWeight="0.5057956" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32467532" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32900432" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903865" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43939394" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3051948" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24925596" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32827735" sideWeight="0.4923664" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
@@ -433,6 +401,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32467532" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -463,25 +432,11 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="74" />
+      <option name="time" value="78" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/window.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1054">
-          <caret line="62" column="29" lean-forward="false" selection-start-line="62" selection-start-column="29" selection-end-line="62" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xinput.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/world.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -835,7 +790,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="177">
           <caret line="973" column="0" lean-forward="false" selection-start-line="973" selection-start-column="0" selection-end-line="973" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -843,7 +797,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -851,40 +804,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3944">
           <caret line="236" column="12" lean-forward="true" selection-start-line="236" selection-start-column="12" selection-end-line="236" selection-end-column="12" />
-          <folding>
-            <element signature="e#279#315#0" expanded="false" />
-            <element signature="e#385#420#0" expanded="false" />
-            <element signature="e#9589#20286#0" expanded="false" />
-            <element signature="e#20331#23179#0" expanded="false" />
-            <element signature="e#23216#23761#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/raycast.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
-          <caret line="40" column="16" lean-forward="true" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
-          <folding>
-            <element signature="e#109#191#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/xinput.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="72" column="34" lean-forward="false" selection-start-line="72" selection-start-column="34" selection-end-line="72" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#13#0" expanded="false" />
-            <element signature="e#1394#1802#0" expanded="false" />
-            <element signature="e#2860#2899#0" expanded="false" />
-            <element signature="e#2932#3085#0" expanded="false" />
-            <element signature="e#3596#4316#0" expanded="false" />
-            <element signature="e#4386#4590#0" expanded="false" />
-            <element signature="e#6941#9188#0" expanded="false" />
-            <element signature="e#8126#9144#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -892,17 +811,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
           <caret line="276" column="0" lean-forward="false" selection-start-line="276" selection-start-column="0" selection-end-line="276" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="12" lean-forward="false" selection-start-line="18" selection-start-column="12" selection-end-line="18" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#22#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -910,9 +818,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -920,24 +825,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="36" column="19" lean-forward="true" selection-start-line="36" selection-start-column="19" selection-end-line="36" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/xinput.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="302" column="21" lean-forward="false" selection-start-line="302" selection-start-column="21" selection-end-line="302" selection-end-column="21" />
+          <folding>
+            <element signature="e#11513#14326#0" expanded="false" />
+            <element signature="e#11557#13803#0" expanded="false" />
+            <element signature="e#12390#12626#0" expanded="false" />
+            <element signature="e#12741#13759#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/asd/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="23" lean-forward="true" selection-start-line="4" selection-start-column="23" selection-end-line="4" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/raycast.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="40" column="16" lean-forward="true" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/input.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
+        <state relative-caret-position="374">
+          <caret line="22" column="45" lean-forward="false" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
           <folding>
-            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#0#40#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="619">
-          <caret line="92" column="20" lean-forward="false" selection-start-line="92" selection-start-column="20" selection-end-line="92" selection-end-column="20" />
+        <state relative-caret-position="-981">
+          <caret line="77" column="69" lean-forward="false" selection-start-line="77" selection-start-column="69" selection-end-line="77" selection-end-column="69" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -946,11 +879,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/window.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="59" lean-forward="true" selection-start-line="29" selection-start-column="59" selection-end-line="29" selection-end-column="59" />
+        <state relative-caret-position="1462">
+          <caret line="86" column="59" lean-forward="false" selection-start-line="86" selection-start-column="59" selection-end-line="86" selection-end-column="59" />
           <folding>
             <element signature="e#0#58#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="32" column="33" lean-forward="true" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/timing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="42" column="24" lean-forward="true" selection-start-line="42" selection-start-column="24" selection-end-line="42" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>

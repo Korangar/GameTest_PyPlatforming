@@ -1,6 +1,6 @@
 from xinput import XGamepad, AnalogStick
 from pygame.math import Vector2
-from player import Player
+from player import PlayerEntity
 
 
 # update function for input
@@ -15,13 +15,12 @@ def poll(player: list):
             continue
         else:
             if not player[i]:
-                player[i] = Player()
+                player[i] = PlayerEntity()
 
             stick_left = pad.input_state["analog_left"]  # type: AnalogStick
             player[i].player_directional(Vector2() + (stick_left.x, stick_left.y))
 
             events = pad.input_state["event"]
-            print(events)
             if "button_a" in events and events["button_a"]:
                 player[i].jump()
 
