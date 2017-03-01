@@ -12,7 +12,7 @@ USHORT = 65535
 
 
 # Structures
-class XINPUT_GAMEPAD(ctypes.Structure):
+class XINPUTGAMEPAD(ctypes.Structure):
     _fields_ = [("wButtons", ctypes.c_ushort),
                 ("bLeftTrigger", ctypes.c_ubyte),
                 ("bRightTrigger", ctypes.c_ubyte),
@@ -23,12 +23,12 @@ class XINPUT_GAMEPAD(ctypes.Structure):
                 ("sThumbRY", ctypes.c_short)]
 
 
-class XINPUT_STATE(ctypes.Structure):
+class XINPUTSTATE(ctypes.Structure):
     _fields_ = [("dwPacketNumber", ctypes.c_uint32),
-                ("Gamepad", XINPUT_GAMEPAD)]
+                ("Gamepad", XINPUTGAMEPAD)]
 
 
-class XINPUT_VIBRATION(ctypes.Structure):
+class XINPUTVIBRATION(ctypes.Structure):
     _fields_ = [("wLeftMotorSpeed", ctypes.c_ushort),
                 ("wRightMotorSpeed", ctypes.c_ushort)]
 
@@ -36,12 +36,30 @@ class XINPUT_VIBRATION(ctypes.Structure):
 _xinput = ctypes.windll.xinput1_1
 # getState
 _XInputGetState = _xinput.XInputGetState
-_XInputGetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUT_STATE)]
+_XInputGetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUTSTATE)]
 _XInputGetState.resttype = ctypes.c_uint
 # setVibration
 _XInputSetState = _xinput.XInputSetState
-_XInputSetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUT_VIBRATION)]
+_XInputSetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUTVIBRATION)]
 _XInputSetState.restype = ctypes.c_uint
+
+
+class AnalogStick:
+    def __init__(self, raw_x, raw_y, deadzone):
+        self.raw_x = raw_x
+        self.raw_y = raw_y
+        axis_x = raw_x / CSHORT
+        axis_y = raw_y / CSHORT
+        magnitude = (axis_x ** 2 + axis_y ** 2) ** 0.5
+        if magnitude > deadzone:
+            dz_factor = (magnitude - deadzone) / (1 - deadzone)
+            self.x = axis_x / magnitude * dz_factor
+            self.y = axis_y / magnitude * dz_factor
+            self.magnitude = magnitude
+        else:
+            self.x = 0
+            self.y = 0
+            self.magnitude = 0
 
 
 class XGamepad(Enum):
@@ -53,7 +71,7 @@ class XGamepad(Enum):
     @staticmethod
     def update():
         t_now = time_now()
-        state = XINPUT_STATE()
+        state = XINPUTSTATE()
         for gamepad in XGamepad:
             if gamepad.connected:
                 gamepad.get_state(state)
@@ -67,40 +85,18 @@ class XGamepad(Enum):
     def __init__(self, value):
         # hardware info
         self._raw_id = value
-        self.connected = False
         self.disabled = False
+        self.connected = False
+        self.deadzone = 0.3
         self.last_update = 0
-        self.analog_deadzone = 0.3
-        # axes
-        self.analog_right_x = 0
-        self.analog_right_y = 0
-        self.analog_right_m = 0
-        self.analog_left_x = 0
-        self.analog_left_y = 0
-        self.analog_left_m = 0
-        self.trigger_right = 0
-        self.trigger_left = 0
-        # buttons
-        self.shoulder_right = False
-        self.shoulder_left = False
-        self.button_back = False
-        self.button_start = False
-        self.stick_right = False
-        self.stick_left = False
-        self.button_a = False
-        self.button_b = False
-        self.button_x = False
-        self.button_y = False
-        self.dpad_right = False
-        self.dpad_left = False
-        self.dpad_down = False
-        self.dpad_up = False
+        self.input_state = None
+        self._reset_input()
         # vibration
-        self.vibration_right = 0
         self.vibration_left = 0
+        self.vibration_right = 0
 
     def __repr__(self):
-        return "gamepad{}".format(self._raw_id)
+        return "XGamepad:gamepad{}".format(self._raw_id)
 
     def __str__(self):
         if self.connected:
@@ -109,51 +105,38 @@ class XGamepad(Enum):
             tmp = "not connected"
         return "gamepad{}({})".format(self._raw_id, tmp)
 
-    def _subtract_deadzone(self, analog_axis_x: int, analog_axis_y: int):
-        axis_x = analog_axis_x/CSHORT
-        axis_y = analog_axis_y/CSHORT
-        magnitude = (axis_x ** 2 + axis_y ** 2) ** 0.5
-        if magnitude > self.analog_deadzone:
-            dz_factor = (magnitude - self.analog_deadzone) / (1 - self.analog_deadzone)
-            return axis_x / magnitude * dz_factor, axis_y / magnitude * dz_factor, magnitude
-        else:
-            return 0, 0, 0
-
     def _reset_input(self):
-        # axes
-        self.analog_right_x = 0
-        self.analog_right_y = 0
-        self.analog_right_m = 0
-        self.analog_left_x = 0
-        self.analog_left_y = 0
-        self.analog_left_m = 0
-        self.trigger_right = 0
-        self.trigger_left = 0
-        # buttons
-        self.shoulder_right = False
-        self.shoulder_left = False
-        self.button_back = False
-        self.button_start = False
-        self.stick_right = False
-        self.stick_left = False
-        self.button_a = False
-        self.button_b = False
-        self.button_x = False
-        self.button_y = False
-        self.dpad_right = False
-        self.dpad_left = False
-        self.dpad_down = False
-        self.dpad_up = False
+        self.input_state = {
+            "analog_right": AnalogStick(0, 0, self.deadzone),
+            "analog_left": AnalogStick(0, 0, self.deadzone),
+            "trigger_right": 0,
+            "trigger_left": 0,
+            "shoulder_right": False,
+            "shoulder_left": False,
+            "button_start": False,
+            "button_back": False,
+            "stick_right": False,
+            "stick_left": False,
+            "button_a": False,
+            "button_b": False,
+            "button_x": False,
+            "button_y": False,
+            "dpad_right": False,
+            "dpad_left": False,
+            "dpad_down": False,
+            "dpad_up": False,
+            "events": None
+        }
 
     def set_vibration(self, left: float=0, right: float=0):
         self.vibration_left = left
         self.vibration_right = right
-        vibration = XINPUT_VIBRATION(int(left * USHORT), int(right * USHORT))
+        vibration = XINPUTVIBRATION(int(left * USHORT), int(right * USHORT))
         _XInputSetState(self._raw_id, ctypes.byref(vibration))
 
     def get_state(self, state=None):
         if not state:
-            state = XINPUT_STATE()
+            state = XINPUTSTATE()
         self.last_update = time_now()
         error_code = _XInputGetState(self._raw_id, state)
         if error_code == NOT_CONNECTED:
@@ -177,39 +160,161 @@ class XGamepad(Enum):
             # update state and stats
             self.connected = True
             gamepad = state.Gamepad
-            # update axes
-            dz_x, dz_y, m = self._subtract_deadzone(gamepad.sThumbRX, gamepad.sThumbRY)
-            self.analog_right_x = dz_x
-            self.analog_right_y = dz_y
-            self.analog_right_m = m
-            dz_x, dz_y, m = self._subtract_deadzone(gamepad.sThumbLX, gamepad.sThumbLY)
-            self.analog_left_x = dz_x
-            self.analog_left_y = dz_y
-            self.analog_left_m = m
-            self.trigger_right = gamepad.bRightTrigger/UBYTE
-            self.trigger_left = gamepad.bLeftTrigger/UBYTE
+            new_state = dict()
+            events = dict()
+            # analog_right
+            new_value = AnalogStick(gamepad.sThumbRX, gamepad.sThumbRY, self.deadzone)
+            old_value = self.input_state["analog_right"]
+            dx = new_value.x - old_value.x
+            dy = new_value.y - old_value.y
+            if abs(dx) > 0 or abs(dy) > 0:
+                events["analog_right"] = (dx, dy)
+            new_state["analog_right"] = new_value
+            # analog_left
+            new_value = AnalogStick(gamepad.sThumbLX, gamepad.sThumbLY, self.deadzone)
+            old_value = self.input_state["analog_left"]
+            dx = new_value.x - old_value.x
+            dy = new_value.y - old_value.y
+            if abs(dx) > 0 or abs(dy) > 0:
+                events["analog_left"] = (dx, dy)
+            new_state["analog_left"] = new_value
+            # trigger_right
+            new_value = gamepad.bRightTrigger/UBYTE
+            old_value = self.input_state["trigger_right"]
+            delta = new_value - old_value
+            if abs(delta) > 0:
+                events["trigger_right"] = delta
+            new_state["trigger_right"] = new_value
+            # trigger_left
+            new_value = gamepad.bLeftTrigger/UBYTE
+            old_value = self.input_state["trigger_left"]
+            delta = new_value - old_value
+            if abs(delta) > 0:
+                events["trigger_left"] = delta
+            new_state["trigger_left"] = new_value
 
             def get_button(mask):
                 return gamepad.wButtons & mask is not 0
-            # update buttons
-            self.dpad_up = get_button(0x0001)
-            self.dpad_down = get_button(0x0002)
-            self.dpad_left = get_button(0x0004)
-            self.dpad_right = get_button(0x0008)
-            self.button_start = get_button(0x0010)
-            self.button_back = get_button(0x0020)
-            self.stick_left = get_button(0x0040)
-            self.stick_right = get_button(0x0080)
-            self.shoulder_left = get_button(0x0100)
-            self.shoulder_right = get_button(0x0200)
-            self.button_a = get_button(0x1000)
-            self.button_b = get_button(0x2000)
-            self.button_x = get_button(0x4000)
-            self.button_y = get_button(0x8000)
+            # dpad_up
+            new_value = get_button(0x0001)
+            old_value = self.input_state["dpad_up"]
+            if new_value and not old_value:
+                events["dpad_up"] = True
+            elif old_value and not new_value:
+                events["dpad_up"] = False
+            new_state["dpad_up"] = new_value
+            # dpad_down
+            new_value = get_button(0x0002)
+            old_value = self.input_state["dpad_down"]
+            if new_value and not old_value:
+                events["dpad_down"] = True
+            elif old_value and not new_value:
+                events["dpad_down"] = False
+            new_state["dpad_down"] = new_value
+            # dpad_left
+            new_value = get_button(0x0004)
+            old_value = self.input_state["dpad_left"]
+            if new_value and not old_value:
+                events["dpad_left"] = True
+            elif old_value and not new_value:
+                events["dpad_left"] = False
+            new_state["dpad_left"] = new_value
+            # dpad_right
+            new_value = get_button(0x0008)
+            old_value = self.input_state["dpad_right"]
+            if new_value and not old_value:
+                events["dpad_right"] = True
+            elif old_value and not new_value:
+                events["dpad_right"] = False
+            new_state["dpad_right"] = new_value
+            # button_start
+            new_value = get_button(0x0010)
+            old_value = self.input_state["button_start"]
+            if new_value and not old_value:
+                events["button_start"] = True
+            elif old_value and not new_value:
+                events["button_start"] = False
+            new_state["button_start"] = new_value
+            # button_back
+            new_value = get_button(0x0020)
+            old_value = self.input_state["button_back"]
+            if new_value and not old_value:
+                events["button_back"] = True
+            elif old_value and not new_value:
+                events["button_back"] = False
+            new_state["button_back"] = new_value
+            # stick_left
+            new_value = get_button(0x0040)
+            old_value = self.input_state["stick_left"]
+            if new_value and not old_value:
+                events["stick_left"] = True
+            elif old_value and not new_value:
+                events["stick_left"] = False
+            new_state["stick_left"] = new_value
+            # stick_right
+            new_value = get_button(0x0080)
+            old_value = self.input_state["stick_right"]
+            if new_value and not old_value:
+                events["stick_right"] = True
+            elif old_value and not new_value:
+                events["stick_right"] = False
+            new_state["stick_right"] = new_value
+            # shoulder_left
+            new_value = get_button(0x0100)
+            old_value = self.input_state["shoulder_left"]
+            if new_value and not old_value:
+                events["shoulder_left"] = True
+            elif old_value and not new_value:
+                events["shoulder_left"] = False
+            new_state["shoulder_left"] = new_value
+            # shoulder_right
+            new_value = get_button(0x0200)
+            old_value = self.input_state["shoulder_right"]
+            if new_value and not old_value:
+                events["shoulder_right"] = True
+            elif old_value and not new_value:
+                events["shoulder_right"] = False
+            new_state["shoulder_right"] = new_value
+            # button_a
+            new_value = get_button(0x1000)
+            old_value = self.input_state["button_a"]
+            if new_value and not old_value:
+                events["button_a"] = True
+            elif old_value and not new_value:
+                events["button_a"] = False
+            new_state["button_a"] = new_value
+            # button_b
+            new_value = get_button(0x2000)
+            old_value = self.input_state["button_b"]
+            if new_value and not old_value:
+                events["button_b"] = True
+            elif old_value and not new_value:
+                events["button_b"] = False
+            new_state["button_b"] = new_value
+            # button_x
+            new_value = get_button(0x4000)
+            old_value = self.input_state["button_x"]
+            if new_value and not old_value:
+                events["button_x"] = True
+            elif old_value and not new_value:
+                events["button_x"] = False
+            new_state["button_x"] = new_value
+            # button_y
+            new_value = get_button(0x8000)
+            old_value = self.input_state["button_y"]
+            if new_value and not old_value:
+                events["button_y"] = True
+            elif old_value and not new_value:
+                events["button_y"] = False
+            new_state["button_y"] = new_value
+            # inauguration
+            new_state["event"] = events
+            self.input_state = new_state
+
 
 if __name__ == "__main__":
     def controller_test(pad: XGamepad):
-        state = XINPUT_STATE()
+        state = XINPUTSTATE()
         print("{} test trigger".format(pad))
         while pad.connected:
             was_pressed = pad.button_back
