@@ -1,10 +1,9 @@
-from xinput import XGamepad, AnalogStick
 from pygame.math import Vector2
 from player import PlayerEntity
 
 
 # update function for input
-def poll(player: list):
+def xpoll(player: list):
     XGamepad.update()
     gamepads = list(XGamepad)
     for i in range(4):
@@ -26,3 +25,12 @@ def poll(player: list):
 
             if "button_x" in events and events["button_x"]:
                 player[i].shoot()
+
+def nopoll(player:list):
+    pass
+
+try:
+    from xinput import XGamepad, AnalogStick
+    poll = xpoll
+except:
+    poll = nopoll
