@@ -12,7 +12,7 @@ CLR_pinkish = (255, 0, 110)
 CLR_blueish = (0, 148, 255)
 CLR_orange = (255, 106, 0)
 CLR_red = (255, 0, 0)
-TILE_CLRs = {0: CLR_black, 1: CLR_darkgray}
+TILE_CLRs = {0: CLR_black, 1: CLR_darkgray, 2: CLR_blueish}
 PLAYER_CLRs = {0: CLR_white, 1: CLR_pinkish, 2: CLR_blueish, 3: CLR_orange}
 TILE_scale = 16
 

@@ -1,5 +1,6 @@
 from pygame.math import Vector2
-from world import FIELD, IMPASSABLE, SAFE
+from world import FIELD, SAFE
+from raycast import *
 import timing
 
 # character animation states
@@ -39,41 +40,13 @@ def static_colision_tile_snap(value, move):
         return int(value)
 
 
-def static_collision_check(pos):
-    tile_id = FIELD[int(pos.y)][int(pos.x)]
-    if tile_id in IMPASSABLE:
-        return True
-    else:
-        return False
-
-
-def static_collision_raycast(start, direction, amount):
-    # without points no collision
-    if not len(start) > 0:
-        return False, amount
-    i = 0
-    # check in bitesized steps
-    while i < amount:
-        delta = direction * i  # type: Vector2
-        # for every collision point
-        for p in start:
-            if static_collision_check(p + delta):
-                return True, i
-        i += 1
-    # check the end point
-    delta = direction * amount
-    for p in start:
-        if static_collision_check(p + delta):
-            return True, amount
-    return False, amount
-
-
 class PlayerEntity:
     def __init__(self):
         self.state = STAND
         self.position = Vector2() + SAFE
         self.velocity = Vector2() + (0.0, 0.0)
         self.acceleration = Vector2() + (0.0, 90.0)
+        self.look_direction = Vector2() + (1.0, 0.0)
         self.field = FIELD
         # when input commands are passed into update this can be none
         self.events = []
@@ -81,6 +54,10 @@ class PlayerEntity:
     # input commands
     def player_directional(self, stick_input):
         if stick_input.x != 0:
+            if stick_input.x > 0:
+                self.look_direction.x = 1
+            else:
+                self.look_direction.x = -1
             self.velocity.x = stick_input.x * const_RUN
             if abs(self.velocity.x) > 0 and self.state in [STAND, STAND_LEDGE]:
                 self.events.append("run")
@@ -94,7 +71,9 @@ class PlayerEntity:
             self.events.append("jump")
 
     def shoot(self):
-        self.field[int(self.position.y) + 1][int(self.position.x)] = 0
+        print(self.position)
+        for tx, ty in ray_iterator(self.position, self.look_direction, 10):
+                self.field[int(ty)][int(tx)] = 2
 
     # update functions
     def physics_update(self):
