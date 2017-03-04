@@ -55,9 +55,9 @@ class PlayerEntity:
 
     def get_shoot_origin(self):
         if self.look_direction.x < 0:
-            return self.position - (0.5, 0)
+            return self.position - (0, 0)
         else:
-            return self.position + (1.5, 0)
+            return self.position + (1, 0)
 
     # input commands
     def enable_aiming(self, enable: bool):
@@ -94,7 +94,7 @@ class PlayerEntity:
             print("jump")
 
     def shoot(self):
-        for t, i in bresenham_ray_iterator(self.get_shoot_origin(), self.look_direction, 30):
+        for t, i in bresenham_line_iterator(self.get_shoot_origin(), self.get_shoot_origin()+self.look_direction*30):
             if self.field[int(t.y)][int(t.x)] is not 1:
                 self.field[int(t.y)][int(t.x)] = 2
             else:

@@ -33,10 +33,46 @@ def vector_ray_iterator(start: Vector2, direction: Vector2, distance: float):
 
 
 def bresenham_ray_iterator(start: Vector2, direction: Vector2, distance: float):
-    yield from bresenham_line_iterator(start, start + direction * distance)
+    yield from bresenham_line_iterator1(start, start + direction * distance)
 
 
-def bresenham_line_iterator(start: Vector2, stop: Vector2):
+def bresenham_line_iterator(start, stop):
+    start_x, start_y = start
+    stop_x, stop_y = stop
+
+    steep = abs(stop_y - start_y) > abs(stop_x - start_x)
+    if steep:
+        start_x, start_y = start_y, start_x
+        stop_y, stop_x = stop_x, stop_y
+    invert_x = stop_x < start_x
+    if invert_x:
+        start_x = -start_x
+        stop_x = -stop_x
+    delta_x = stop_x - start_x
+    delta_y = abs(stop_y - start_y)
+    error = 0
+    y = start_y
+    if start_y < stop_y:
+        ystep = 1
+    else:
+        ystep = -1
+    x = start_x
+    while x <= stop_x:
+        rx = x
+        if invert_x:
+            rx = -rx
+        if steep:
+            yield Vector2() + (y, rx), x
+        else:
+            yield Vector2() + (rx, y), x
+        error += delta_y
+        if 2 * error >= delta_x:
+            y += ystep
+            error -= delta_x
+        x += 1
+
+
+def bresenham_line_iterator2(start: Vector2, stop: Vector2):
     if start == stop:
         yield Vector2()+(start.x, start.y), 0.0
         return
@@ -87,19 +123,60 @@ def bresenham_line_iterator(start: Vector2, stop: Vector2):
             delta += 1
             fy += m
 
+
+def bresenham_line_iterator1(start: Vector2, stop: Vector2):
+    steep = abs(stop.y - start.y) > abs(stop.x - start.x)
+    if steep:
+        start.x, start.y = start.y, start.x
+        stop.y, stop.x = stop.x, stop.y
+    if start.x > stop.x:
+        start.x, stop.x = stop.x, start.x
+        start.y, stop.y = stop.y, start.y
+    deltax = stop.x - start.x
+    deltay = abs(stop.y - start.y)
+    error = 0
+    y = start.y
+    if start.y < stop.y:
+        ystep = 1
+    else:
+        ystep = -1
+    x = start.x
+    while x <= stop.x:
+        if steep:
+            yield Vector2() + (y, x), x
+        else:
+            yield Vector2() + (x, y), x
+        error += deltay
+        if 2 * error >= deltax:
+            y += ystep
+            error -= deltax
+        x += 1
+
+
 if __name__ == "__main__":
     start = Vector2()+(0, 0)
     direction = Vector2() + (1, 1)
+    direction.normalize_ip()
     amnt = 100.0
+    n = 1
+    test1_f = vector_ray_iterator
+    test2_f = bresenham_line_iterator2
     import timeit
+
+    vec_result = list(test1_f(Vector2() + (0, 0), direction, amnt))
+    bres_result = list(test2_f(Vector2() + (0, 0), direction * amnt))
+
+    def test1():
+        list(test1_f(start, direction, amnt))
     print("vector time:{}".
-          format(timeit.timeit(lambda: list(vector_ray_iterator(start, direction, amnt)), number=1)))
+          format(timeit.timeit(test1, number=n)/n/len(vec_result)))
+
+    def test2():
+        test2_f(start, start + direction * amnt)
     print("bresenham time:{}".
-          format(timeit.timeit(lambda: list(bresenham_ray_iterator(start, direction, amnt)), number=1)))
+          format(timeit.timeit(test2, number=n)/n/len(bres_result)))
 
 
-    vec_result = list(vector_ray_iterator(Vector2() + (0, 0), direction, amnt))
-    bres_result = list(bresenham_ray_iterator(Vector2() + (0, 0), direction, amnt))
 
-    print(list(map((lambda t: (t[0].x, t[0].y, t[1])), vec_result)))
+    print(vec_result)
     print(bres_result)
