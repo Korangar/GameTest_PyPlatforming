@@ -2,37 +2,44 @@ from pygame.math import Vector2
 from world import FIELD, IMPASSABLE
 
 
-def static_collision_check(pos):
-    tile_id = FIELD[int(pos.y)][int(pos.x)]
+def static_collision_check(vector: Vector2):
+    tile_id = FIELD[int(vector.y)][int(vector.x)]
     if tile_id in IMPASSABLE:
         return True
     else:
         return False
 
 
-def static_collision_raycast(start, direction, amount):
+def bulk_check(node: [Vector2], direction: Vector2, amount: float):
     # without points no collision
-    if not start:
+    if not node:
         return False, amount
-    if amount > 1:
-        pass
-    delta = direction * amount
-    for p in start:
-        # check the start point
-        if static_collision_check(p):
-            return True, 0
-        # check the end point
-        if static_collision_check(p + delta):
-            return True, amount
+    direction.normalize_ip()
+    for p in node:
+        for v, amount in vector_ray_iterator(p, direction, amount):
+            if static_collision_check(v):
+                return True, amount
     return False, amount
 
 
-def ray_iterator(start: Vector2, direction: Vector2, distance: float):
-    stop = start + direction * distance  # type: Vector2
-    return line_iterator(start, stop)
+def vector_ray_iterator(start: Vector2, direction: Vector2, distance: float):
+    i = 0
+    delta = Vector2()+start
+    while i < distance:
+        yield delta, i
+        delta = delta + direction
+        i += 1
+    yield start + direction * distance, distance
 
 
-def line_iterator(start: Vector2, stop: Vector2):
+def bresenham_ray_iterator(start: Vector2, direction: Vector2, distance: float):
+    yield from bresenham_line_iterator(start, start + direction * distance)
+
+
+def bresenham_line_iterator(start: Vector2, stop: Vector2):
+    if start == stop:
+        yield Vector2()+(start.x, start.y), 0.0
+        return
     start_x = start.x
     start_y = start.y
     stop_x = stop.x
@@ -55,8 +62,8 @@ def line_iterator(start: Vector2, stop: Vector2):
     fy = m + start_y
     x = start_x
     y = start_y
-    delta = abs(stop_x - start_x)
-    while delta > 0:
+    delta = 0
+    while delta < abs(stop_x - start_x):
         # prepare yield values
         tmp_x = x
         tmp_y = y
@@ -67,7 +74,7 @@ def line_iterator(start: Vector2, stop: Vector2):
         if swap:
             tmp_x, tmp_y = tmp_y, tmp_x
         # yield next value
-        yield tmp_x, tmp_y
+        yield Vector2()+(tmp_x, tmp_y), delta
         # check for next increment
         if step_y is -1:
             check_y = abs(y) - 1 >= abs(fy)
@@ -77,5 +84,22 @@ def line_iterator(start: Vector2, stop: Vector2):
             y += step_y
         else:
             x += step_x
-            delta -= 1
+            delta += 1
             fy += m
+
+if __name__ == "__main__":
+    start = Vector2()+(0, 0)
+    direction = Vector2() + (1, 1)
+    amnt = 100.0
+    import timeit
+    print("vector time:{}".
+          format(timeit.timeit(lambda: list(vector_ray_iterator(start, direction, amnt)), number=1)))
+    print("bresenham time:{}".
+          format(timeit.timeit(lambda: list(bresenham_ray_iterator(start, direction, amnt)), number=1)))
+
+
+    vec_result = list(vector_ray_iterator(Vector2() + (0, 0), direction, amnt))
+    bres_result = list(bresenham_ray_iterator(Vector2() + (0, 0), direction, amnt))
+
+    print(list(map((lambda t: (t[0].x, t[0].y, t[1])), vec_result)))
+    print(bres_result)

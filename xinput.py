@@ -33,7 +33,10 @@ class XINPUTVIBRATION(ctypes.Structure):
                 ("wRightMotorSpeed", ctypes.c_ushort)]
 
 # load Xinput.dll
-_xinput = ctypes.windll.xinput1_1
+try:
+    _xinput = ctypes.windll.xinput1_1
+except:
+    raise ImportError
 # getState
 _XInputGetState = _xinput.XInputGetState
 _XInputGetState.argtypes = [ctypes.c_uint, ctypes.POINTER(XINPUTSTATE)]
@@ -62,17 +65,17 @@ class AnalogStick:
             self.magnitude = 0
 
 
-class XGamepad(Enum):
-    gamepad0 = 0
-    gamepad1 = 1
-    gamepad2 = 2
-    gamepad3 = 3
+class Gamepad(Enum):
+    gamepad_0 = 0
+    gamepad_1 = 1
+    gamepad_2 = 2
+    gamepad_3 = 3
 
     @staticmethod
     def update():
         t_now = time_now()
         state = XINPUTSTATE()
-        for gamepad in XGamepad:
+        for gamepad in Gamepad:
             if gamepad.connected:
                 gamepad.get_state(state)
             else:
@@ -313,7 +316,7 @@ class XGamepad(Enum):
 
 
 if __name__ == "__main__":
-    def controller_test(pad: XGamepad):
+    def controller_test(pad: Gamepad):
         state = XINPUTSTATE()
         print("{} test trigger".format(pad))
         while pad.connected:
@@ -374,7 +377,7 @@ if __name__ == "__main__":
     running = True
     test_start_time = time_now()
     while running and test_start_time + 360 > time_now():
-        for pad in XGamepad:
+        for pad in Gamepad:
             if not pad.connected:
                 pad.get_state()
                 if pad.connected:

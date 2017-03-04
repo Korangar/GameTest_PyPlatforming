@@ -3,9 +3,9 @@ from player import PlayerEntity
 
 
 # update function for input
-def xpoll(player: list):
-    XGamepad.update()
-    gamepads = list(XGamepad)
+def x_poll(player: list):
+    xinput.Gamepad.update()
+    gamepads = list(xinput.Gamepad)
     for i in range(4):
         pad = gamepads[i]  # type: XGamepad
         if not pad.connected:
@@ -16,8 +16,11 @@ def xpoll(player: list):
             if not player[i]:
                 player[i] = PlayerEntity()
 
-            stick_left = pad.input_state["analog_left"]  # type: AnalogStick
+            stick_left = pad.input_state["analog_left"]  # type: xinput.AnalogStick
             player[i].player_directional(Vector2() + (stick_left.x, stick_left.y))
+
+            trigger_right = pad.input_state["trigger_right"]
+            player[i].enable_aiming(trigger_right > 0.5)
 
             events = pad.input_state["event"]
             if "button_a" in events and events["button_a"]:
@@ -26,11 +29,13 @@ def xpoll(player: list):
             if "button_x" in events and events["button_x"]:
                 player[i].shoot()
 
+
 def nopoll(player:list):
     pass
 
 try:
-    from xinput import XGamepad, AnalogStick
-    poll = xpoll
-except:
+    import xinput
+    poll = x_poll
+except ImportError:
+    xinput = None
     poll = nopoll

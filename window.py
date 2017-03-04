@@ -25,7 +25,7 @@ class PygameWindow:
         self.raw_w, self.raw_h = len(FIELD[0]) * TILE_scale, len(FIELD) * TILE_scale
         self.scale = 1
         self.resolution = int(self.raw_w * self.scale), int(self.raw_h * self.scale)
-        self.display_surface = display.set_mode(self.resolution, FULLSCREEN)
+        self.display_surface = display.set_mode(self.resolution)
         # init a debug font
         self.debug_font = font.Font(None, 10)
         self.effect_smoke = []
@@ -52,6 +52,8 @@ class PygameWindow:
                 pos_x = (player.position.x + 0.0) * TILE_scale
                 pos_y = (player.position.y - 1.0) * TILE_scale
                 draw.rect(canvas, player_color, (pos_x, pos_y, TILE_scale, TILE_scale * 2), 0)
+                aim_origin = player.get_shoot_origin()*TILE_scale
+                draw.line(canvas, CLR_red, aim_origin, aim_origin + player.look_direction*TILE_scale*30)
                 for e in player.events:
                     if e is "jump":
                         self.add_effect((pos_x + 0.5 * TILE_scale, pos_y + 2 * TILE_scale), player_color)

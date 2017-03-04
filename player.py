@@ -8,12 +8,14 @@ STAND = 0
 STAND_LEDGE = 1
 WALK = 10
 DASH = 11
+AIM = 15
 JUMP = 20
 FALL = 21
 
 # state logic groupings
 STATES_JUMPABLE = [STAND, STAND_LEDGE, WALK, DASH, FALL]
 STATES_APPLY_GRAVITY = [JUMP, FALL]
+STATES_AIMABLE = [STAND, STAND_LEDGE, WALK, DASH]
 
 # raycast vectors and collision nodes
 RC_AXIS_x = Vector2()+(1, 0)
@@ -51,29 +53,52 @@ class PlayerEntity:
         # when input commands are passed into update this can be none
         self.events = []
 
-    # input commands
-    def player_directional(self, stick_input):
-        if stick_input.x != 0:
-            if stick_input.x > 0:
-                self.look_direction.x = 1
-            else:
-                self.look_direction.x = -1
-            self.velocity.x = stick_input.x * const_RUN
-            if abs(self.velocity.x) > 0 and self.state in [STAND, STAND_LEDGE]:
-                self.events.append("run")
+    def get_shoot_origin(self):
+        if self.look_direction.x < 0:
+            return self.position - (0.5, 0)
         else:
+            return self.position + (1.5, 0)
+
+    # input commands
+    def enable_aiming(self, enable: bool):
+        pass
+        if enable and self.state in STATES_AIMABLE:
             self.velocity.x = 0
+            self.state = AIM
+        elif not enable and self.state is AIM:
+            self.state = STAND
+
+    def player_directional(self, stick_input: Vector2):
+        if self.state is AIM:
+            if stick_input.length() > 0:
+                self.look_direction = stick_input.normalize()
+                self.look_direction.y = -self.look_direction.y
+        else:
+            if stick_input.x != 0:
+                self.look_direction.y = 0
+                if stick_input.x > 0:
+                    self.look_direction.x = 1
+                else:
+                    self.look_direction.x = -1
+                self.velocity.x = stick_input.length() * self.look_direction.x * const_RUN
+                if abs(self.velocity.x) > 0 and self.state in [STAND, STAND_LEDGE]:
+                    self.events.append("run")
+            else:
+                self.velocity.x = 0
 
     def jump(self):
         if self.state in STATES_JUMPABLE:
             self.state = JUMP
             self.velocity[1] = const_JUMP
             self.events.append("jump")
+            print("jump")
 
     def shoot(self):
-        print(self.position)
-        for tx, ty in ray_iterator(self.position, self.look_direction, 10):
-                self.field[int(ty)][int(tx)] = 2
+        for t, i in bresenham_ray_iterator(self.get_shoot_origin(), self.look_direction, 30):
+            if self.field[int(t.y)][int(t.x)] is not 1:
+                self.field[int(t.y)][int(t.x)] = 2
+            else:
+                break
 
     # update functions
     def physics_update(self):
@@ -103,7 +128,7 @@ class PlayerEntity:
         else:
             rc_start = []
         # determine maximal distance player can move without collision
-        collision, distance = static_collision_raycast(rc_start, RC_AXIS_x, speed.x)
+        collision, distance = bulk_check(rc_start, RC_AXIS_x, speed.x)
         if collision:
             # move and snap to tile
             self.position.x = static_colision_tile_snap(self.position.x, distance)
@@ -119,7 +144,7 @@ class PlayerEntity:
         else:
             rc_start = []
         # check y direction
-        collision, distance = static_collision_raycast(rc_start, RC_AXIS_y, speed.y)
+        collision, distance = bulk_check(rc_start, RC_AXIS_y, speed.y)
         if collision:
             # move and snap to tile
             self.position.y = static_colision_tile_snap(self.position.y, distance)
@@ -130,10 +155,11 @@ class PlayerEntity:
 
     def state_check_and_update(self):
         # check for footing
-        good_footing = static_collision_check(self.position + RC_POINT_GROUNDED)
-        if good_footing:
+        if static_collision_check(self.position + RC_POINT_GROUNDED):
             footing = True
-            if self.velocity .x == 0:
+            if self.state is AIM:
+                pass
+            elif self.velocity .x == 0:
                 self.state = STAND
             else:
                 self.state = WALK
@@ -141,8 +167,10 @@ class PlayerEntity:
             footing = False
             for off in RC_POINTS_bottom:
                 if static_collision_check(self.position + off):
-                    footing = True
-                    break
+                    if self.state is not AIM:
+                        footing = True
+                        self.state = STAND_LEDGE
+                        break
         # apply falling state if not jumping
         if not footing and not self.state == JUMP:
             self.state = FALL
