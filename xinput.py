@@ -34,7 +34,7 @@ class XINPUTVIBRATION(ctypes.Structure):
 
 # load Xinput.dll
 try:
-    _xinput = ctypes.windll.xinput1_1
+    _xinput = ctypes.windll.xinput9_1_0
 except:
     raise ImportError
 # getState
