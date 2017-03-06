@@ -12,7 +12,7 @@ CLR_pinkish = (255, 0, 110)
 CLR_blueish = (0, 148, 255)
 CLR_orange = (255, 106, 0)
 CLR_red = (255, 0, 0)
-TILE_CLRs = {0: CLR_black, 1: CLR_darkgray, 2: CLR_blueish}
+TILE_CLRs = {0: CLR_black, 1: CLR_darkgray, 2: CLR_red}
 PLAYER_CLRs = {0: CLR_white, 1: CLR_pinkish, 2: CLR_blueish, 3: CLR_orange}
 TILE_scale = 16
 
@@ -25,9 +25,9 @@ class PygameWindow:
         self.raw_w, self.raw_h = len(FIELD[0]) * TILE_scale, len(FIELD) * TILE_scale
         self.scale = 1
         self.resolution = int(self.raw_w * self.scale), int(self.raw_h * self.scale)
-        self.display_surface = display.set_mode(self.resolution)
+        self.display_surface = display.set_mode(self.resolution, FULLSCREEN)
         # init a debug font
-        self.debug_font = font.Font(None, 10)
+        self.debug_font = font.Font(font.get_default_font(), 10)
         self.effect_smoke = []
 
     def render(self, player):
