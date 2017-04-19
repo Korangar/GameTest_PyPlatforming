@@ -1,5 +1,5 @@
 from pygame.math import Vector2
-from player import PlayerEntity
+from player import Player
 
 
 # update function for input
@@ -14,7 +14,7 @@ def x_poll(player: list):
             continue
         else:
             if not player[i]:
-                player[i] = PlayerEntity()
+                player[i] = Player()
 
             stick_left = pad.input_state["analog_left"]  # type: xinput.AnalogStick
             player[i].player_directional(Vector2() + (stick_left.x, stick_left.y))

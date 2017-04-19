@@ -42,7 +42,7 @@ def static_colision_tile_snap(value, move):
         return int(value)
 
 
-class PlayerEntity:
+class Player:
     def __init__(self):
         self.state = STAND
         self.position = Vector2() + SAFE

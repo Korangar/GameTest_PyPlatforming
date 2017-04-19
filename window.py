@@ -1,7 +1,7 @@
 from pygame import display, draw, font, Surface, transform
 from world import FIELD
 from pygame.locals import *
-from player import PlayerEntity
+from player import Player
 
 
 CLR_black = (0, 0, 0)
@@ -46,7 +46,7 @@ class PygameWindow:
                 subsurf = canvas.subsurface((scr_x, scr_y, TILE_scale, TILE_scale))
                 subsurf.fill(TILE_CLRs[FIELD[row][col]])
         for i in range(4):
-            player = players[i]  # type: PlayerEntity
+            player = players[i]  # type: Player
             player_color = PLAYER_CLRs[i]
             if player:
                 pos_x = (player.position.x + 0.0) * TILE_scale

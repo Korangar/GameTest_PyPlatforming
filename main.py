@@ -1,5 +1,5 @@
 from input import poll
-from player import PlayerEntity
+from player import Player
 from window import PygameWindow
 from pygame import init, event
 from pygame.locals import *
@@ -38,7 +38,7 @@ if __name__ == "__main__":
             poll(players)
 
             # game update, should be in world optimaly
-            for player in players:  # type: PlayerEntity
+            for player in players:  # type: Player
                 if player:
                     player.update()
 
